@@ -31,6 +31,15 @@
   <div class="container signin">
     <p>Already have an account? <a href="#">Sign in</a>.</p>
   </div>
+  <!-- Background image -->
+<div
+  class="bg-image"
+  style="
+    background-image: url('https://mdbcdn.b-cdn.net/img/Photos/Others/images/76.webp');
+    height: 100vh;
+  "
+></div>
+<!-- Background image -->
 
    <h1> Thankyou, Happy Learning </h1>
 
