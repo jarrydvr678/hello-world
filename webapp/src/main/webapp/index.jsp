@@ -1,144 +1,70 @@
 
-<!-- Pills navs -->
-<ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-  <li class="nav-item" role="presentation">
-    <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" href="#pills-login" role="tab"
-      aria-controls="pills-login" aria-selected="true">Login</a>
-  </li>
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="tab-register" data-mdb-toggle="pill" href="#pills-register" role="tab"
-      aria-controls="pills-register" aria-selected="false">Register</a>
-  </li>
-</ul>
-<!-- Pills navs -->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="ui" uri="http://www.jahia.org/tags/uiComponentsLib" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="template" uri="http://www.jahia.org/tags/templateLib" %>
+<%@ taglib prefix="jcr" uri="http://www.jahia.org/tags/jcr" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="bootstrap" uri="http://www.jahia.org/tags/bootstrapLib" %>
+<%--@elvariable id="currentNode" type="org.jahia.services.content.JCRNodeWrapper"--%>
+<%--@elvariable id="out" type="java.io.PrintWriter"--%>
+<%--@elvariable id="script" type="org.jahia.services.render.scripting.Script"--%>
+<%--@elvariable id="scriptInfo" type="java.lang.String"--%>
+<%--@elvariable id="workspace" type="java.lang.String"--%>
+<%--@elvariable id="renderContext" type="org.jahia.services.render.RenderContext"--%>
+<%--@elvariable id="currentResource" type="org.jahia.services.render.Resource"--%>
+<%--@elvariable id="url" type="org.jahia.services.render.URLGenerator"--%>
+<%--@elvariable id="currentAliasUser" type="org.jahia.services.usermanager.JahiaUser"--%>
 
-<!-- Pills content -->
-<div class="tab-content">
-  <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
-    <form>
-      <div class="text-center mb-3">
-        <p>Sign in with:</p>
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-facebook-f"></i>
-        </button>
+<bootstrap:addCSS/>
+<template:addResources type="javascript" resources="bootstrap-alert.js"/>
+<c:if test="${!renderContext.loggedIn || currentAliasUser.username eq 'guest'}">
+    <script type="text/javascript">
+        document.onkeydown = function (e) {
+            if ((e || window.event).keyCode == 13) document.loginForm.submit();
+        };
+    </script>
+    <ui:loginArea class="form-inline">
+        <ui:isLoginError var="loginResult">
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <fmt:message
+                        key="${loginResult == 'account_locked' ? 'message.accountLocked' : 'message.invalidUsernamePassword'}"/>
+            </div>
+        </ui:isLoginError>
+        <c:if test="${not empty param['loginError']}">
+            <div class="alert alert-error">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <fmt:message
+                        key="${param['loginError'] == 'account_locked' ? 'message.accountLocked' : 'message.invalidUsernamePassword'}"/>
+            </div>
+        </c:if>
 
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-google"></i>
-        </button>
+        <input class="input-small" type="text" value="" tabindex="1" maxlength="250" name="username" id="username"
+               placeholder="<fmt:message key="label.username"/>"/>
+        <input class="input-small" type="password" tabindex="2" maxlength="250" name="password" id="password"
+               placeholder="<fmt:message key="label.password"/>"/>
 
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-twitter"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-github"></i>
-        </button>
-      </div>
-
-      <p class="text-center">or:</p>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="loginName" class="form-control" />
-        <label class="form-label" for="loginName">Email or username</label>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="loginPassword" class="form-control" />
-        <label class="form-label" for="loginPassword">Password</label>
-      </div>
-
-      <!-- 2 column grid layout -->
-      <div class="row mb-4">
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Checkbox -->
-          <div class="form-check mb-3 mb-md-0">
-            <input class="form-check-input" type="checkbox" value="" id="loginCheck" checked />
-            <label class="form-check-label" for="loginCheck"> Remember me </label>
-          </div>
-        </div>
-
-        <div class="col-md-6 d-flex justify-content-center">
-          <!-- Simple link -->
-          <a href="#!">Forgot password?</a>
-        </div>
-      </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-4">Sign in</button>
-
-      <!-- Register buttons -->
-      <div class="text-center">
-        <p>Not a member? <a href="#!">Register</a></p>
-      </div>
-    </form>
-  </div>
-  <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
-    <form>
-      <div class="text-center mb-3">
-        <p>Sign up with:</p>
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-facebook-f"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-google"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-twitter"></i>
-        </button>
-
-        <button type="button" class="btn btn-link btn-floating mx-1">
-          <i class="fab fa-github"></i>
-        </button>
-      </div>
-
-      <p class="text-center">or:</p>
-
-      <!-- Name input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerName" class="form-control" />
-        <label class="form-label" for="registerName">Name</label>
-      </div>
-
-      <!-- Username input -->
-      <div class="form-outline mb-4">
-        <input type="text" id="registerUsername" class="form-control" />
-        <label class="form-label" for="registerUsername">Username</label>
-      </div>
-
-      <!-- Email input -->
-      <div class="form-outline mb-4">
-        <input type="email" id="registerEmail" class="form-control" />
-        <label class="form-label" for="registerEmail">Email</label>
-      </div>
-
-      <!-- Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerPassword" class="form-control" />
-        <label class="form-label" for="registerPassword">Password</label>
-      </div>
-
-      <!-- Repeat Password input -->
-      <div class="form-outline mb-4">
-        <input type="password" id="registerRepeatPassword" class="form-control" />
-        <label class="form-label" for="registerRepeatPassword">Repeat password</label>
-      </div>
-
-      <!-- Checkbox -->
-      <div class="form-check d-flex justify-content-center mb-4">
-        <input class="form-check-input me-2" type="checkbox" value="" id="registerCheck" checked
-          aria-describedby="registerCheckHelpText" />
-        <label class="form-check-label" for="registerCheck">
-          I have read and agree to the terms
+        <label class="checkbox">
+            <input type="checkbox" id="rememberme" name="useCookie"/><fmt:message key="loginForm.rememberMe.label"/>
         </label>
-      </div>
 
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
-    </form>
-  </div>
-</div>
-<!-- Pills content -->
+        <button type="submit" class="btn btn-small btn-primary"><fmt:message
+                key='loginForm.loginbutton.label'/></button>
+    </ui:loginArea>
+</c:if>
+<c:if test="${renderContext.loggedIn &&  !(currentAliasUser.username eq 'guest')}">
+    <jcr:node var="user" path="${renderContext.user.localPath}"/>
+    <jcr:nodeProperty node="${user}" name="j:publicProperties" var="publicProperties"/>
+    <c:set var="publicPropertiesAsString" value=""/>
+
+    <c:forEach items="${publicProperties}" var="value">
+        <c:set var="publicPropertiesAsString" value="${value.string} ${publicPropertiesAsString}"/>
+    </c:forEach>
+
+    <p><fmt:message key="label.loggedAs"/>&nbsp;${renderContext.user.username}
+        <c:if test="${!empty currentAliasUser}"> (as ${currentAliasUser.username})</c:if>&nbsp;
+        <a class="btn btn-small btn-primary"
+           href='<c:url value="${url.logout}"/>'><span><fmt:message key="label.logout"/></span></a>
+    </p>
+</c:if>
